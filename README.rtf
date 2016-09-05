@@ -1,0 +1,46 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1404\cocoasubrtf470
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+\margl1440\margr1440\vieww11320\viewh12720\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 ChatRoom\
+\
+My program consists of two packages: the server package and the client package. \
+\
+Server package: \
+	Auxiliary class HostAddress (HostAddress.java) contains two variables, IP-Address and port number. This class was created to help keep track of users\'92 host machine information and to make it easier to manipulate this information. \
+\
+	The server tester (ServerTester.java) is the stating point of the program. It takes as an argument the server port number that it will listen for messages on. It then creates a Server object (Server.java). The server object listens on the selected port for incoming connection requests from clients. The server also has a hash map for online users (key: user, value: hostAddress), a hash map for offline messages (key: user, value: list of messages received when offline), a hash map for the blacklist information of users (key: user, value: list of users that that user has blocked), and a linked list of all the users that are forbidden from logging in due to too many incorrect attempts. \
+	 When it receives a request, it creates a new socket, and passes this socket to a new thread of the class ServerWorker (ServerWorker.java). The hash maps for offline messages, online users, and blacklisted users, as well as the linked list of users blocked from log in are also passed to this thread. The server worker now uses an Authenticator object (Authenticator.java) to verify the credentials that the user entered. If the user has entered valid credentials, they are admitted to the chat room. \
+	The Server Listener Worker object  (ServerListenerWorker.java) is used to manage the heartbeat functionality. It continually listens for a heartbeat signal from the user every 30 seconds. If 30 seconds have gone by and the user has not sent the heartbeat signal, the Server Listener Worker assumes the client has logged out or is not responding, so they tell the Server to log that user out of the system. \
+\
+Client package: \
+	The client tester (ClientTester.java) is the starting point of the program on the client side. It takes as input the IP-address of the server and the port on which the server is listening. It then creates a Client object (Client.java), which prompts the user to enter credentials. If the user enters the credentials incorrectly three times, they are blocked out of the system for 60 seconds. When the users enters valid credentials, they are admitted into the chat room. The Client Worker (ClientWorker.java) is used to take in user input and send it to the server. The Client Heartbeat object (ClientHeartbeat.java) is used to send the heartbeat signal to the server to tell it that it is still alive. This class ensures that if the user quits the program using control-C, the program will end gracefully.\
+\
+List of completed portions:\
+-User authentification\
+-Message exchange\
+-Multiple client support\
+-Heartbeat\
+-Blacklist\
+-Offline messaging\
+-Broadcast\
+-Display current users\
+-Logout\
+-Graceful exit using control-C\
+-P2P obtain online user\'92s IP-address\
+-P2P Offline report\
+-P2P message exchange\
+-Bonus: P2P privacy (before sending the address, the server checks the user\'92s block list)\
+-Bonus: Guaranteed message delivery\
+Note: P2P consent was not achieved. The commented out code within the client source code is my attempt at completing this but was ultimately unsuccessful. I decided not to delete the code in case partial credit is awarded for the bonus section.\
+*No permanent connection is maintained between server and client in this program.\
+\
+\ul To Run the Program\
+\ulnone Compile: Within the root level of the program directory, run make.\
+To start the server: java server.ServerTester [port number]\
+(example: java server.ServerTester 6789)\
+To start the client: java client.ClientTester [ip-address] [port number]\
+(example: java client.ClientTester 160.39.154.225 6789)\
+}
